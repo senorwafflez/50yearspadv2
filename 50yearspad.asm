@@ -61,6 +61,38 @@ setimgcolors:
 
 		inx
 		bne setimgcolors
+
+        ldx #$00
+        lda #$10
+setwhitecolorfortext:        
+        sta $0400,x
+        sta $0428,x
+        sta $0450,x
+        sta $0478,x
+        sta $04a0,x
+        sta $04c8,x
+        sta $04f0,x
+        sta $0518,x
+        sta $0540,x
+        sta $0568,x
+        sta $0590,x
+        sta $05b8,x
+        sta $05e0,x
+        sta $0608,x
+        sta $0630,x
+        sta $0658,x
+        sta $0680,x
+        sta $06a8,x
+        sta $06d0,x
+        sta $06f8,x
+        sta $0720,x
+        sta $0748,x
+        sta $0770,x
+        sta $0798,x
+        sta $07c0,x
+        inx
+        cpx #$10
+        bne setwhitecolorfortext
         rts        
 
 irq:	pha
@@ -234,7 +266,7 @@ stabilizer_raster_000:
 delay: .byte 1,1,1,1,$10,$10,1,1
 
 setsprites:
-        lda #$01
+        lda #$02
         sta $d027
         sta $d028
         sta $d029
@@ -306,6 +338,7 @@ spriteblock2Ypos:
 
 
         rts
+
 
 .pc = $0900 "sprites for scroller"
 
