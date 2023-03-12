@@ -86,6 +86,16 @@ irq:	pha
 		lda #$18
 		sta $d018
 
+        lda #$ff
+        sta $d015
+
+        lda #$00
+        sta $d01b
+        sta $d01d
+        sta $d017
+
+
+        jsr setsprites
        
         lda #$f9
 		sta $d012
@@ -222,3 +232,89 @@ stabilizer_raster_000:
         rts
 
 delay: .byte 1,1,1,1,$10,$10,1,1
+
+setsprites:
+        lda #$01
+        sta $d027
+        sta $d028
+        sta $d029
+        sta $d02a
+        sta $d02b
+        sta $d02c
+        sta $d02d
+        sta $d02e
+
+        //min x = $18
+        //max x = $68
+spriteblock1Xpos:        
+        lda #$18
+        sta $d000
+        sta $d004
+        clc
+        adc #$18
+        sta $d002
+        sta $d006
+
+spriteblock1Ypos:
+        lda #$32  //start $32
+        sta $d001
+        sta $d003
+        clc
+        adc #$15
+        sta $d005
+        sta $d007
+
+        lda #$0900 / 64
+        sta $07f8
+        lda #$0940 / 64
+        sta $07f9
+
+        lda #$0980 / 64
+        sta $07fa
+        lda #$09c0 / 64
+        sta $07fb
+
+        //min x = $18
+        //max x = $68
+spriteblock2Xpos:        
+        lda #$40
+        sta $d008
+        sta $d00c
+        clc
+        adc #$18
+        sta $d00a
+        sta $d00e
+
+spriteblock2Ypos:
+        lda #$5c
+        sta $d009
+        sta $d00b
+        clc
+        adc #$15
+        sta $d00d
+        sta $d00f
+
+        lda #$0a00 / 64
+        sta $07fc
+        lda #$0a40 / 64
+        sta $07fd
+
+        lda #$0a80 / 64
+        sta $07fe
+        lda #$0ac0 / 64
+        sta $07ff
+
+
+        rts
+
+.pc = $0900 "sprites for scroller"
+
+.fill 64, $55
+.fill 64, $aa
+.fill 64, $55
+.fill 64, $aa
+
+.fill 64, $55
+.fill 64, $aa
+.fill 64, $55
+.fill 64, $aa
