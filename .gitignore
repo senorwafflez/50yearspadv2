@@ -1,0 +1,9 @@
+.vscode
+.asminfo.txt
+.source.txt
+*.dbg
+*.vs
+*.sym
+*.prg
+buildlog.txt
+bin/*
