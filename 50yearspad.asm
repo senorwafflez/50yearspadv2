@@ -4,6 +4,7 @@
 
 .import source "padbitmap.asm"
 .import source "padscreencolors.asm"
+.import source "charset.asm"
 
 .pc = $0801 "Program Start"
 :BasicUpstart($1000)
@@ -156,6 +157,7 @@ irq2:	pha
 
         inc $d020
     //    jsr music.play
+        jsr texttobitmap
         dec $d020
 
 
@@ -265,6 +267,50 @@ stabilizer_raster_000:
 
 delay: .byte 1,1,1,1,$10,$10,1,1
 
+texttobitmap:
+        ldx #$00
+        ldy #$00
+setchartobitmap1:        
+        lda charsetload+8,x
+        sta $2000,x
+        lda charsetload + 8*2,x
+        sta $2008,x
+        lda charsetload + 8*3,x
+        sta $2010,x
+        lda charsetload + 8*4,x
+        sta $2018,x
+
+        lda charsetload + 8*5,x
+        sta $2020,x
+        lda charsetload + 8*6,x
+        sta $2028,x
+        lda charsetload + 8*7,x
+        sta $2030,x
+        lda charsetload + 8*8,x
+        sta $2038,x
+
+        lda charsetload + 8*9,x
+        sta $2040,x
+        lda charsetload + 8*10,x
+        sta $2048,x
+        lda charsetload + 8*11,x
+        sta $2050,x
+        lda charsetload + 8*12,x
+        sta $2058,x
+
+        lda charsetload + 8*13,x
+        sta $2060,x
+        lda charsetload + 8*14,x
+        sta $2068,x
+        lda charsetload + 8*15,x
+        sta $2070,x
+        lda charsetload + 8*16,x
+        sta $2078,x
+        inx
+        cpx #$08
+        bne setchartobitmap1
+        rts
+
 setsprites:
         lda #$02
         sta $d027
@@ -279,7 +325,7 @@ setsprites:
         //min x = $18
         //max x = $68
 spriteblock1Xpos:        
-        lda #$18
+        lda #$80
         sta $d000
         sta $d004
         clc
@@ -309,7 +355,7 @@ spriteblock1Ypos:
         //min x = $18
         //max x = $68
 spriteblock2Xpos:        
-        lda #$40
+        lda #$80
         sta $d008
         sta $d00c
         clc
