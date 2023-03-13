@@ -6,6 +6,7 @@
 .import source "padscreencolors.asm"
 .import source "charset.asm"
 .import source "textchanger.asm"
+.import source "50sprites.asm"
 
 .pc = $0801 "Program Start"
 :BasicUpstart($1000)
@@ -136,11 +137,17 @@ irq:	pha
 
         lda #$ff
         sta $d015
+        sta $d01c
 
         lda #$00
         sta $d01b
         sta $d01d
         sta $d017
+
+        lda #$06
+        sta $d026
+        lda #$0e
+        sta $d025
 
         jsr setsprites
         // lda #$07
@@ -289,7 +296,7 @@ stabilizer_raster_000:
 delay: .byte 1,1,1,1,$10,$10,1,1
 
 setsprites:
-        lda #$02
+        lda #$0f
         sta $d027
         sta $d028
         sta $d029
@@ -303,30 +310,30 @@ setsprites:
         //max x = $68
 spriteblock1Xpos:        
         lda #$80
-        sta $d000
-        sta $d004
+        sta $d000        
         clc
         adc #$18
         sta $d002
+        adc #$18
+        sta $d004
+        adc #$18
         sta $d006
 
 spriteblock1Ypos:
         lda #$32  //start $32
         sta $d001
         sta $d003
-        clc
-        adc #$15
         sta $d005
         sta $d007
 
-        lda #$0900 / 64
+        lda #spr_img0/ 64
         sta $07f8
-        lda #$0940 / 64
+        lda #spr_img1/ 64
         sta $07f9
 
-        lda #$0980 / 64
+        lda #spr_img2 / 64
         sta $07fa
-        lda #$09c0 / 64
+        lda #spr_img3 / 64
         sta $07fb
 
         //min x = $18
@@ -334,43 +341,30 @@ spriteblock1Ypos:
 spriteblock2Xpos:        
         lda #$80
         sta $d008
-        sta $d00c
         clc
         adc #$18
         sta $d00a
+        adc #$18
+        sta $d00c
+        adc #$18
         sta $d00e
 
 spriteblock2Ypos:
-        lda #$5c
+        lda #$32+21
         sta $d009
         sta $d00b
-        clc
-        adc #$15
         sta $d00d
         sta $d00f
 
-        lda #$0a00 / 64
+        lda #spr_img4 / 64
         sta $07fc
-        lda #$0a40 / 64
+        lda #spr_img5 / 64
         sta $07fd
 
-        lda #$0a80 / 64
+        lda #spr_img6 / 64
         sta $07fe
-        lda #$0ac0 / 64
+        lda #spr_img7 / 64
         sta $07ff
 
 
         rts
-
-
-.pc = $0900 "sprites for scroller"
-
-.fill 64, $55
-.fill 64, $aa
-.fill 64, $55
-.fill 64, $aa
-
-.fill 64, $55
-.fill 64, $aa
-.fill 64, $55
-.fill 64, $aa
