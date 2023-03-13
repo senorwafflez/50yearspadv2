@@ -49,12 +49,6 @@ iloop:
 		lda #$00
 		sta iloop+1
 
-        lda #$07
-        sta $d020
-        jsr textchanger
-        lda #$00
-        sta $d020
-
 wait:
 		jmp iloop
 
@@ -150,13 +144,13 @@ irq:	pha
         sta $d025
 
         jsr setsprites
-        // lda #$07
-        // sta $d020
-        // jsr textchanger2
+        jsr music.play
+
         lda #$02
         sta $d020
-       
-        lda #$f9
+
+
+        lda #$c0
 		sta $d012
 		lda #<irq2
 		sta $fffe
@@ -178,18 +172,17 @@ irq2:	pha
 		lda #$ff
 		sta $d019
 
-        lda #$02
+        lda #$00
         sta $d020
 
-        inc $d020
-    //    jsr music.play
-        //jsr textchanger
-        dec $d020
+        jsr textchanger
 
+        lda #$06
+        sta $d020
 
         dec iloop + 1
 
-		lda #$30
+		lda #$50
 		sta $d012
 		lda #<irq
 		sta $fffe
@@ -309,7 +302,7 @@ setsprites:
         //min x = $18
         //max x = $68
 spriteblock1Xpos:        
-        lda #$80
+        lda #$30
         sta $d000        
         clc
         adc #$18
@@ -320,7 +313,7 @@ spriteblock1Xpos:
         sta $d006
 
 spriteblock1Ypos:
-        lda #$32  //start $32
+        lda #$c0  //start $32
         sta $d001
         sta $d003
         sta $d005
@@ -339,7 +332,7 @@ spriteblock1Ypos:
         //min x = $18
         //max x = $68
 spriteblock2Xpos:        
-        lda #$80
+        lda #$30
         sta $d008
         clc
         adc #$18
@@ -350,7 +343,7 @@ spriteblock2Xpos:
         sta $d00e
 
 spriteblock2Ypos:
-        lda #$32+21
+        lda #$c0+21
         sta $d009
         sta $d00b
         sta $d00d
