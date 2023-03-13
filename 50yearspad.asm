@@ -41,7 +41,21 @@
         jsr music.init
 
         cli
-        jmp *
+iloop:	
+        lda #$00
+		beq wait
+
+		lda #$00
+		sta iloop+1
+
+        lda #$07
+        sta $d020
+        jsr textchanger
+        lda #$00
+        sta $d020
+
+wait:
+		jmp iloop
 
 nmi:
 		rti
@@ -128,8 +142,12 @@ irq:	pha
         sta $d01d
         sta $d017
 
-
         jsr setsprites
+        // lda #$07
+        // sta $d020
+        // jsr textchanger2
+        lda #$02
+        sta $d020
        
         lda #$f9
 		sta $d012
@@ -158,9 +176,11 @@ irq2:	pha
 
         inc $d020
     //    jsr music.play
-        jsr textchanger
+        //jsr textchanger
         dec $d020
 
+
+        dec iloop + 1
 
 		lda #$30
 		sta $d012
