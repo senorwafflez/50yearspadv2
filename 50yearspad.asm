@@ -7,6 +7,7 @@
 .import source "charset.asm"
 .import source "textchanger.asm"
 .import source "50sprites.asm"
+.import source "confettibmp.asm"
 
 .pc = $0801 "Program Start"
 :BasicUpstart($1000)
@@ -104,6 +105,32 @@ setwhitecolorfortext:
         inx
         cpx #$10
         bne setwhitecolorfortext
+
+        ldx #$00
+confettiora:        
+        lda confettibmp,x
+        ora $2000,x
+        sta $2000,x
+        lda confettibmp+$100,x
+        ora $2100,x
+        sta $2100,x
+        lda confettibmp+$200,x
+        ora $2200,x
+        sta $2200,x
+        lda confettibmp+$300,x
+        ora $2300,x
+        sta $2300,x
+        lda confettibmp+$400,x
+        ora $2400,x
+        sta $2400,x
+        lda confettibmp+$500,x
+        ora $2500,x
+        sta $2500,x
+        lda confettibmp+$600,x
+        ora $2600,x
+        sta $2600,x
+        inx
+        bne confettiora
         rts        
 
 irq:	pha
