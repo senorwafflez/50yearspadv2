@@ -131,6 +131,16 @@ confettiora:
         sta $2600,x
         inx
         bne confettiora
+
+        ldx #$00
+setconfetticols:        
+        lda confetticols,x
+        cmp #$00
+        beq skipsetcol
+        sta $0400,x
+skipsetcol:
+        inx
+        bne setconfetticols
         rts        
 
 irq:	pha
@@ -171,7 +181,7 @@ irq:	pha
         sta $d025
 
         jsr setsprites
-        jsr music.play
+        //jsr music.play
 
         lda #$02
         sta $d020
