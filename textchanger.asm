@@ -9,7 +9,7 @@
 textcountdown:
 .byte $80
 canchangetext:
-.byte $01
+.byte $02
 
 textchanger:
 
@@ -17,26 +17,75 @@ textchanger:
     bne docountdown
 
     jsr executetextchange
+    jmp skipcolorsetthisframe
 
 docountdown:
-    lda textcountdown
-    beq movenextext
+    lda canchangetext
+    cmp #$01
+    bne keepchangingcolors
 
-    dec textcountdown  //TODO : set from colorroutine
+    jsr movenextext
+    // lda textcountdown
+    // beq movenextext
+
+    // dec textcountdown  //TODO : set from colorroutine
+
+keepchangingcolors:
 
     ldx #$00
-    ldy #$00
 colorline1:    
-    lda colorchangetable,y
+    lda colorchangetable
     sta $04f0,x
+colorline2:
+    lda colorchangetable
+    sta $0540,x
+colorline3:
+    lda colorchangetable
+    sta $0590,x
+colorline4:
+    lda colorchangetable
+    sta $05e0,x
+colorline5:
+    lda colorchangetable
+    sta $0630,x
+colorline6:
+    lda colorchangetable
+    sta $0680,x
+
     inx
     cpx #$10
     bne colorline1
+
+    lda colorline1 + 1
+    clc
+    adc #$01
+    sta colorline1 + 1
+    adc #$02
+    sta colorline2 + 1
+    adc #$02
+    sta colorline3 + 1
+    adc #$02
+    sta colorline4 + 1
+    adc #$02
+    sta colorline5 + 1
+    adc #$02
+    sta colorline6 + 1
+
+    lda colorline1 + 1
+    cmp #$f8
+    beq setcanchangetext
+
+ skipcolorsetthisframe:   
+    rts
+
+setcanchangetext:
+    lda #$01
+    sta canchangetext
     rts
 
 movenextext:
-    lda #$80
-    sta textcountdown
+    // lda #$80
+    // sta textcountdown
     lda #$00
     sta canchangetext
 
@@ -76,7 +125,7 @@ greetingshiByte:
     .byte $09, $09, $0a, $0a, $0b, $0b
 
 executetextchange:
-    lda #$01
+    lda #$02
     sta canchangetext
 
     ldx #$00   
@@ -228,10 +277,15 @@ textforoutput:
 
 .pc = $6800 "Textchanger colortable"
 colorchangetable:
-.byte $60, $60, $60, $60, $60, $60, $60, $60
-.byte $40, $40, $40, $40, $40, $40, $40, $40
-.byte $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0
-.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0
+.byte $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00
+
+.byte $60, $60, $60, $60, $40, $40, $40, $40
+.byte $e0, $e0, $e0, $e0, $f0, $f0, $f0, $f0
+.byte $10, $10, $10, $10, $10, $10, $10, $10
+.byte $10, $10, $10, $10, $10, $10, $10, $10
 
 .byte $10, $10, $10, $10, $10, $10, $10, $10
 .byte $10, $10, $10, $10, $10, $10, $10, $10
@@ -255,13 +309,8 @@ colorchangetable:
 
 .byte $10, $10, $10, $10, $10, $10, $10, $10
 .byte $10, $10, $10, $10, $10, $10, $10, $10
-.byte $10, $10, $10, $10, $10, $10, $10, $10
-.byte $10, $10, $10, $10, $10, $10, $10, $10
-
-.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0
-.byte $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0
-.byte $40, $40, $40, $40, $40, $40, $40, $40
-.byte $60, $60, $60, $60, $60, $60, $60, $60
+.byte $f0, $f0, $f0, $f0, $e0, $e0, $e0, $e0
+.byte $40, $40, $40, $40, $60, $60, $60, $60
 
 .byte $00, $00, $00, $00, $00, $00, $00, $00
 .byte $00, $00, $00, $00, $00, $00, $00, $00
