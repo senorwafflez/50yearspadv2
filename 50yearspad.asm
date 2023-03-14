@@ -209,7 +209,7 @@ irq2:	pha
 		lda #$ff
 		sta $d019
 
-        lda #$00
+        lda #$0a
         sta $d020
 
         jsr textchanger

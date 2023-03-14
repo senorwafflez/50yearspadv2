@@ -1,10 +1,39 @@
+.import source "greetingstext.asm"
+
 .pc = $4200 "Textchanger"
 
 //.var charsetload = $4000
 .var lineadd = $280
 .var line1start = $2000 + $140 * 6
 
+textcountdown:
+.byte $00
+
 textchanger:
+    ldx #$00
+    lda greetingsloByte,x
+    sta $fa
+    lda greetingshiByte,x
+    sta $fb
+
+    ldy #$00
+    ldx #$00
+movetexttooutput:    
+    lda ($fa),y
+    sta textforoutput,x
+    inx
+    iny
+    cpx #$60
+    bne movetexttooutput
+    rts
+
+greetingsloByte:
+    .byte $00, $80, $00, $80, $00, $80
+
+greetingshiByte:
+    .byte $09, $09, $0a, $0a, $0b, $0b
+
+executetextchange:
     ldx #$00   
     .for (var j = 0; j < 16; j++)
     {       
