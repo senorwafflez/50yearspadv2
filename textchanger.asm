@@ -7,9 +7,31 @@
 .var line1start = $2000 + $140 * 6
 
 textcountdown:
-.byte $00
+.byte $80
+canchangetext:
+.byte $01
 
 textchanger:
+
+    lda canchangetext
+    bne docountdown
+
+    jsr executetextchange
+
+docountdown:
+    lda textcountdown
+    beq movenextext
+
+    dec textcountdown  //TODO : set from colorroutine
+    rts
+
+movenextext:
+    lda #$80
+    sta textcountdown
+    lda #$00
+    sta canchangetext
+
+nexttext:
     ldx #$00
     lda greetingsloByte,x
     sta $fa
@@ -25,6 +47,16 @@ movetexttooutput:
     iny
     cpx #$60
     bne movetexttooutput
+
+    inc nexttext + 1
+    lda nexttext + 1
+    cmp #$06
+    bne notextchangereset
+
+    lda #$00
+    sta nexttext + 1
+
+notextchangereset:
     rts
 
 greetingsloByte:
@@ -34,6 +66,9 @@ greetingshiByte:
     .byte $09, $09, $0a, $0a, $0b, $0b
 
 executetextchange:
+    lda #$01
+    sta canchangetext
+
     ldx #$00   
     .for (var j = 0; j < 16; j++)
     {       
