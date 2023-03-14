@@ -193,7 +193,7 @@ irq:	pha
 
         lda #$06
         sta $d026
-        lda #$0e
+        lda #$e0
         sta $d025
 
         jsr setsprites
@@ -448,14 +448,39 @@ colorchangeconfetti2:
         sta colorchangeconfetti2 + 1
 
 colorchangeconfetti3:
+        ldx #$00
+        lda confetti2,x
+
+        sta $0404+40*3
+        sta $0405+40*3
+        sta $0404+40*4
+        sta $0405+40*4
+
+
+        inc colorchangeconfetti3 + 1
+        lda colorchangeconfetti3 + 1
+        cmp #$50
+        bne colorchangeconfetti4
+
+        lda #$00
+        sta colorchangeconfetti3 + 1
+
+colorchangeconfetti4:
         rts
 
 .pc = $6900 "Confetticolors"
 confetti1:
-// .byte $02, $02, $02, $02, $0a, $0a, $0a, $0a, $07, $07, $07, $07, $0f, $0f, $0f, $0f
-// .byte $01, $01, $01, $01, $0f, $0f, $0f, $0f, $07, $07, $07, $07, $02, $02, $02, $02
-
 .byte $20, $20, $20, $20, $20, $20, $a0, $a0, $a0, $a0, $a0, $a0, $70, $70, $70, $70
 .byte $70, $70, $f0, $f0, $f0, $f0, $f0, $f0, $10, $10, $10, $10, $10, $10, $f0, $f0
 .byte $f0, $f0, $f0, $f0, $70, $70, $70, $70, $70, $70, $a0, $a0, $a0, $a0, $a0, $a0
 .byte $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20
+
+confetti2:
+.byte $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0
+.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0, $10, $10, $10, $10, $10, $10, $10, $10
+.byte $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10
+.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0
+.byte $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0, $e0
+
+// .byte $02, $02, $02, $02, $0a, $0a, $0a, $0a, $07, $07, $07, $07, $0f, $0f, $0f, $0f
+// .byte $01, $01, $01, $01, $0f, $0f, $0f, $0f, $07, $07, $07, $07, $02, $02, $02, $02
