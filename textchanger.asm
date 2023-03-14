@@ -25,10 +25,6 @@ docountdown:
     bne keepchangingcolors
 
     jsr movenextext
-    // lda textcountdown
-    // beq movenextext
-
-    // dec textcountdown  //TODO : set from colorroutine
 
 keepchangingcolors:
 

@@ -141,6 +141,22 @@ setconfetticols:
 skipsetcol:
         inx
         bne setconfetticols
+
+        lda #$02
+        sta canchangetext
+        lda #$00
+        sta colorline1 + 1
+        clc
+        adc #$02
+        sta colorline2 + 1
+        adc #$02
+        sta colorline3 + 1
+        adc #$02
+        sta colorline4 + 1
+        adc #$02
+        sta colorline5 + 1
+        adc #$02
+        sta colorline6 + 1
         rts        
 
 irq:	pha
