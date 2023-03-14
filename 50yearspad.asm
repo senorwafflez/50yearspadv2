@@ -197,7 +197,10 @@ irq:	pha
         sta $d025
 
         jsr setsprites
+        jsr colorchangeconfetti
         //jsr music.play
+
+
 
         lda #$02
         sta $d020
@@ -414,3 +417,45 @@ spriteblock2Ypos:
 
 
         rts
+
+colorchangeconfetti:
+        ldx #$00
+        lda confetti1,x
+        sta $0405
+
+        inc colorchangeconfetti + 1
+        lda colorchangeconfetti + 1
+        cmp #$40
+        bne colorchangeconfetti2
+
+        lda #$00
+        sta colorchangeconfetti + 1
+
+colorchangeconfetti2:
+        ldx #$0f
+        lda confetti1,x
+
+        sta $040a+40*2
+        sta $040a+40*3
+        sta $040a+40*4
+
+        inc colorchangeconfetti2 + 1
+        lda colorchangeconfetti2 + 1
+        cmp #$40
+        bne colorchangeconfetti3
+
+        lda #$00
+        sta colorchangeconfetti2 + 1
+
+colorchangeconfetti3:
+        rts
+
+.pc = $6900 "Confetticolors"
+confetti1:
+// .byte $02, $02, $02, $02, $0a, $0a, $0a, $0a, $07, $07, $07, $07, $0f, $0f, $0f, $0f
+// .byte $01, $01, $01, $01, $0f, $0f, $0f, $0f, $07, $07, $07, $07, $02, $02, $02, $02
+
+.byte $20, $20, $20, $20, $20, $20, $a0, $a0, $a0, $a0, $a0, $a0, $70, $70, $70, $70
+.byte $70, $70, $f0, $f0, $f0, $f0, $f0, $f0, $10, $10, $10, $10, $10, $10, $f0, $f0
+.byte $f0, $f0, $f0, $f0, $70, $70, $70, $70, $70, $70, $a0, $a0, $a0, $a0, $a0, $a0
+.byte $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20
