@@ -191,11 +191,6 @@ irq:	pha
         sta $d01d
         sta $d017
 
-        lda #$06
-        sta $d026
-        lda #$e0
-        sta $d025
-
         jsr setsprites
         jsr colorchangeconfetti
         //jsr music.play
@@ -354,6 +349,11 @@ setsprites:
         sta $d02c
         sta $d02d
         sta $d02e
+
+        lda #$06
+        sta $d026
+        lda #$0e
+        sta $d025
 
         //min x = $18
         //max x = $68
