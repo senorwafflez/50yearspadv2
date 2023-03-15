@@ -193,6 +193,7 @@ irq:	pha
 
         jsr setsprites
         jsr colorchangeconfetti
+        jsr spritecolorchanger
         //jsr music.play
 
 
@@ -340,7 +341,9 @@ stabilizer_raster_000:
 delay: .byte 1,1,1,1,$10,$10,1,1
 
 setsprites:
-        lda #$0f
+spritecolindex:
+        ldx #$00
+        lda sprite_light,x
         sta $d027
         sta $d028
         sta $d029
@@ -350,10 +353,11 @@ setsprites:
         sta $d02d
         sta $d02e
 
-        lda #$06
-        sta $d026
-        lda #$0e
+        lda sprite_medium,x
         sta $d025
+
+        lda sprite_dark,x
+        sta $d026
 
         //min x = $18
         //max x = $68
@@ -468,6 +472,28 @@ colorchangeconfetti3:
 colorchangeconfetti4:
         rts
 
+spritecolorchanger:
+        lda #$20
+        beq incspritecolorindex
+
+        dec spritecolorchanger + 1
+        rts
+
+incspritecolorindex:
+        lda #$20
+        sta spritecolorchanger + 1
+
+        inc spritecolindex + 1
+        lda spritecolindex + 1
+        cmp #$07
+        bne notresetspritecolindex
+
+        lda #$00
+        sta spritecolindex + 1
+
+notresetspritecolindex:
+        rts
+
 .pc = $6900 "Confetticolors"
 confetti1:
 .byte $20, $20, $20, $20, $20, $20, $a0, $a0, $a0, $a0, $a0, $a0, $70, $70, $70, $70
@@ -491,7 +517,24 @@ confetti3:
 .byte $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $20, $20, $20, $20, $20, $20, $20, $20
 .byte $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20
 
+.pc = $6a00 "Spritecolors"
+//sprite colors 
+// 06, 0e, 0f
+// 02, 0a, 0f
+// 05, 0d, 07
+// 09, 08, 0a
+// 04, 0a, 0f
+// 0b, 0b, 0c
+// 0b, 05, 0d
 
+sprite_light:
+.byte $0f, $0f, $07, $0a, $0f, $0f, $0d
+
+sprite_medium:
+.byte $0e, $0a, $0d, $08, $0a, $0c, $05
+
+sprite_dark:
+.byte $06, $02, $05, $09, $04, $0b, $0b
 
 // .byte $02, $02, $02, $02, $0a, $0a, $0a, $0a, $07, $07, $07, $07, $0f, $0f, $0f, $0f
 // .byte $01, $01, $01, $01, $0f, $0f, $0f, $0f, $07, $07, $07, $07, $02, $02, $02, $02
