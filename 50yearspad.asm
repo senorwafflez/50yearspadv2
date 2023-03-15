@@ -194,7 +194,7 @@ irq:	pha
         jsr setsprites
         jsr colorchangeconfetti
         jsr spritecolorchanger
-        //jsr music.play
+        jsr music.play
 
 
 
@@ -359,10 +359,13 @@ spritecolindex:
         lda sprite_dark,x
         sta $d026
 
+        lda #%00000000
+        sta $d010
+
         //min x = $18
-        //max x = $68
+        //max x = $f7
 spriteblock1Xpos:        
-        lda #$30
+        lda #$88
         sta $d000        
         clc
         adc #$18
@@ -373,7 +376,7 @@ spriteblock1Xpos:
         sta $d006
 
 spriteblock1Ypos:
-        lda #$c0  //start $32
+        lda #$80  //start $32
         sta $d001
         sta $d003
         sta $d005
@@ -390,9 +393,9 @@ spriteblock1Ypos:
         sta $07fb
 
         //min x = $18
-        //max x = $68
+        //max x = $f7
 spriteblock2Xpos:        
-        lda #$30
+        lda #$88
         sta $d008
         clc
         adc #$18
@@ -403,7 +406,7 @@ spriteblock2Xpos:
         sta $d00e
 
 spriteblock2Ypos:
-        lda #$c0+21
+        lda #$80+21
         sta $d009
         sta $d00b
         sta $d00d
@@ -472,16 +475,18 @@ colorchangeconfetti3:
 colorchangeconfetti4:
         rts
 
-spritecolorchanger:
-        lda #$20
-        beq incspritecolorindex
+musicbyte1:
+		.byte $00
 
-        dec spritecolorchanger + 1
+spritecolorchanger:
+        lda $c078+11
+		cmp musicbyte1
+		bne incspritecolorindex
         rts
 
 incspritecolorindex:
-        lda #$20
-        sta spritecolorchanger + 1
+        lda $c078+11
+		sta musicbyte1
 
         inc spritecolindex + 1
         lda spritecolindex + 1
@@ -492,6 +497,7 @@ incspritecolorindex:
         sta spritecolindex + 1
 
 notresetspritecolindex:
+
         rts
 
 .pc = $6900 "Confetticolors"
@@ -518,14 +524,6 @@ confetti3:
 .byte $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20, $20
 
 .pc = $6a00 "Spritecolors"
-//sprite colors 
-// 06, 0e, 0f
-// 02, 0a, 0f
-// 05, 0d, 07
-// 09, 08, 0a
-// 04, 0a, 0f
-// 0b, 0b, 0c
-// 0b, 05, 0d
 
 sprite_light:
 .byte $0f, $0f, $07, $0a, $0f, $0f, $0d
