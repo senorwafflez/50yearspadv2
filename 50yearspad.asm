@@ -505,14 +505,14 @@ musicbyte1:
 		.byte $00
 
 spritecolorchanger:
-        lda $c078+11
-	cmp musicbyte1
-	bne incspritecolorindex
+        lda $14c7
+	cmp #$ff
+	beq incspritecolorindex
         rts
 
 incspritecolorindex:
-        lda $c078+11
-	sta musicbyte1
+        // lda $c078+11
+	// sta musicbyte1
 
         inc spritecolindex + 1
         lda spritecolindex + 1
