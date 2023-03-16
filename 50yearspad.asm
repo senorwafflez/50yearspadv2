@@ -1,4 +1,4 @@
-.var music = LoadSid("Happy_Birthday.sid")
+.var music = LoadSid("Birthday_Pad_V101.sid")
 .pc = music.location "Music"
 .fill music.size, music.getData(i)
 
@@ -10,9 +10,9 @@
 .import source "confettibmp.asm"
 
 .pc = $0801 "Program Start"
-:BasicUpstart($1000)
+:BasicUpstart($c000)
 
-.pc = $1000 "Main interrupt"
+.pc = $c000 "Main interrupt"
 	
         jsr init
 		sei
@@ -45,16 +45,19 @@
         cli
 iloop:	
         lda #$00
-		beq wait
+	beq wait
+	lda #$00
+	sta iloop+1
 
-		lda #$00
-		sta iloop+1
+        inc $d020
+        jsr textchanger
+        dec $d020
 
 wait:
-		jmp iloop
+	jmp iloop
 
 nmi:
-		rti
+	rti
 
 init:
         lda #$93
@@ -191,7 +194,7 @@ irq:	pha
         sta $d01d
         sta $d017
 
-        jsr setsprites
+        // jsr setsprites
         jsr colorchangeconfetti
         jsr spritecolorchanger
         jsr music.play
@@ -202,50 +205,51 @@ irq:	pha
         sta $d020
 
 
-        lda #$c0
-		sta $d012
-		lda #<irq2
-		sta $fffe
-		lda #>irq2
-		sta $ffff
-		pla
-		tay
-		pla
-		tax
-		pla
-		rti
+        lda #$fa
+	sta $d012
+	lda #<irq2
+	sta $fffe
+	lda #>irq2
+	sta $ffff
+	pla
+	tay
+	pla
+	tax
+	pla
+	rti
 
 
 irq2:	pha
-		txa
-		pha
-		tya
-		pha
-		lda #$ff
-		sta $d019
+	txa
+	pha
+	tya
+	pha
+	lda #$ff
+	sta $d019
 
         lda #$0a
         sta $d020
 
-        jsr textchanger
+        jsr setsprites
+        //jsr textchanger
 
         lda #$06
         sta $d020
 
         dec iloop + 1
 
-		lda #$50
-		sta $d012
-		lda #<irq
-		sta $fffe
-		lda #>irq
-		sta $ffff
-		pla
-		tay
-		pla
-		tax
-		pla
-		rti		
+	lda #$50
+	sta $d012
+	lda #<irq
+	sta $fffe
+	lda #>irq
+	sta $ffff
+	pla
+	tay
+	pla
+	tax
+	pla
+	rti		
 
 
 stabilize_raster:      
@@ -373,19 +377,20 @@ spriteblock1Xpos:
  sp4_xpos:
         ldx #$00       
         lda sprite_x4,x
-        sta $d006       
+        sta $d006
+        lda sprite_y4,x
+        sta $d007
+   
         lda do10_x4,x
         // ora do10 + 1
         sta do10 + 1
-
-        inc sp4_xpos + 1
 
 spriteblock1Ypos:
         lda #$80  //start $32
         sta $d001
         sta $d003
         sta $d005
-        sta $d007
+        //sta $d007
 
         lda #spr_img0/ 64
         sta $07f8
@@ -426,6 +431,17 @@ spriteblock2Ypos:
         sta $07fe
         lda #spr_img7 / 64
         sta $07ff
+
+incsp4:
+        inc sp4_xpos + 1
+        lda sp4_xpos + 1
+        cmp #$80
+        bne incsp5
+
+        lda #$00
+        sta sp4_xpos + 1
+
+incsp5:
 
 do10:
         lda #%00000000
@@ -487,13 +503,13 @@ musicbyte1:
 
 spritecolorchanger:
         lda $c078+11
-		cmp musicbyte1
-		bne incspritecolorindex
+	cmp musicbyte1
+	bne incspritecolorindex
         rts
 
 incspritecolorindex:
         lda $c078+11
-		sta musicbyte1
+	sta musicbyte1
 
         inc spritecolindex + 1
         lda spritecolindex + 1
@@ -553,15 +569,16 @@ sprite_x4:
         .byte $08, $08, $08, $07, $06, $05, $04, $02, $01, $fe, $fc, $f9, $f7, $f4, $f1, $ed
         .byte $ea, $e6, $e3, $e0, $de, $db, $d9, $d7, $d6, $d4, $d3, $d2, $d1, $d0, $d0, $d0
 
-        .byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
-        .byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
-        .byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
-        .byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
+sprite_y4:
+        .byte $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
+        .byte $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
+        .byte $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
+        .byte $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80, $80
 
-        .byte $d0, $d0, $d0, $d1, $d2, $d3, $d4, $d6, $d7, $d9, $db, $de, $e0, $e3, $e6, $ea
-        .byte $ed, $f1, $f4, $f7, $f9, $fc, $fe, $01, $02, $04, $05, $06, $07, $08, $08, $08
-        .byte $08, $08, $08, $07, $06, $05, $04, $02, $01, $fe, $fc, $f9, $f7, $f4, $f1, $ed
-        .byte $ea, $e6, $e3, $e0, $de, $db, $d9, $d7, $d6, $d4, $d3, $d2, $d1, $d0, $d0, $d0
+        .byte $80, $80, $80, $7f, $7e, $7d, $7c, $7a, $79, $77, $75, $72, $70, $6d, $6a, $66
+        .byte $63, $5f, $5c, $59, $57, $54, $52, $50, $4f, $4d, $4c, $4b, $4a, $49, $49, $49
+        .byte $49, $49, $49, $4a, $4b, $4c, $4d, $4f, $50, $52, $54, $57, $59, $5c, $5f, $63
+        .byte $66, $6a, $6d, $70, $72, $75, $77, $79, $7a, $7c, $7d, $7e, $7f, $80, $80, $80
 
 .pc = $6c00 "d010 table 1"
 do10_x4:
