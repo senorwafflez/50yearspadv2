@@ -366,8 +366,14 @@ spritecolindex:
         //min x = $18
         //max x = $f7
 spriteblock1Xpos:        
-        lda #$88
+
+sp1_xpos:
+        ldx #$00
+        lda sprite_x1,x
         sta $d000        
+        sta $d008
+
+        lda #$88
         clc
         adc #$18
         sta $d002
@@ -409,7 +415,6 @@ spriteblock1Ypos:
         //max x = $f7
 spriteblock2Xpos:        
         lda #$88
-        sta $d008
         clc
         adc #$18
         sta $d00a
@@ -437,11 +442,13 @@ spriteblock2Ypos:
 
 incsp4:
         inc sp4_xpos + 1
+        inc sp1_xpos + 1
         lda sp4_xpos + 1
         cmp #$80
         bne incsp5
 
         lda #$00
+        sta sp1_xpos + 1
         sta sp4_xpos + 1
 
 incsp5:
@@ -620,6 +627,18 @@ sprite_y8:
         .byte $b2, $b6, $b9, $bc, $be, $c1, $c3, $c5, $c6, $c8, $c9, $ca, $cb, $cc, $cc, $cc
         .byte $cc, $cc, $cc, $cb, $ca, $c9, $c8, $c6, $c5, $c3, $c1, $be, $bc, $b9, $b6, $b2
         .byte $af, $ab, $a8, $a5, $a3, $a0, $9e, $9c, $9b, $99, $98, $97, $96, $95, $95, $95
+
+.pc = $6d00 "Sprite Upper Left Corner"
+sprite_x1:
+        .byte $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88
+        .byte $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88
+        .byte $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88
+        .byte $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88, $88
+
+        .byte $88, $88, $88, $87, $86, $85, $84, $82, $81, $7f, $7d, $7a, $78, $75, $72, $6e
+        .byte $6b, $67, $64, $61, $5f, $5c, $5a, $58, $57, $55, $54, $53, $52, $51, $51, $51
+        .byte $51, $51, $51, $52, $53, $54, $55, $57, $58, $5a, $5c, $5f, $61, $64, $67, $6b
+        .byte $6e, $72, $75, $78, $7a, $7d, $7f, $81, $82, $84, $85, $86, $87, $88, $88, $88
 
 .pc = $7000 "d010 table 1"
 do10_x4:
