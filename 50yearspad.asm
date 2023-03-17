@@ -1,4 +1,4 @@
-.var music = LoadSid("Birthday_Pad_V101.sid")
+.var music = LoadSid("Birthday_Pad_Final.sid")
 .pc = music.location "Music"
 .fill music.size, music.getData(i)
 
@@ -505,8 +505,8 @@ musicbyte1:
 		.byte $00
 
 spritecolorchanger:
-        lda $14c7
-	cmp #$ff
+        lda $14fd
+	cmp #$5f
 	beq incspritecolorindex
         rts
 
