@@ -391,11 +391,13 @@ sp1_xpos:
         lda sprite_y4,x
         clc
         adc spriteyadd
+        sta $d001
         sta $d007
         lda sprite_y8,x
         clc
         adc spriteyadd
         adc #$15
+        sta $d009
         sta $d00f
    
         lda do10_x4,x
@@ -404,7 +406,7 @@ sp1_xpos:
 
 spriteblock1Ypos:
         lda #$80  //start $32
-        sta $d001
+        //sta $d001
         sta $d003
         sta $d005
         //sta $d007
@@ -433,7 +435,7 @@ spriteblock2Xpos:
 
 spriteblock2Ypos:
         lda #$80+21
-        sta $d009
+        // sta $d009
         sta $d00b
         sta $d00d
         //sta $d00f
