@@ -499,6 +499,23 @@ colorchangeconfetti3:
         sta colorchangeconfetti3 + 1
 
 colorchangeconfetti4:
+        ldx #$00
+        lda confetti4,x
+        sta $0412+40
+        // sta $0405+40*3
+        // sta $0404+40*4
+        // sta $0405+40*4
+
+
+        inc colorchangeconfetti4 + 1
+        lda colorchangeconfetti4 + 1
+        cmp #$50
+        bne colorchangeconfetti5
+
+        lda #$00
+        sta colorchangeconfetti4 + 1
+
+colorchangeconfetti5:
         rts
 
 musicbyte1:
@@ -559,6 +576,15 @@ sprite_medium:
 
 sprite_dark:
 .byte $06, $02, $05, $09, $04, $0b, $0b
+
+.pc = $6a40 "Confetti 4 colors"
+
+confetti4:
+.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
+.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0, $10, $10, $10, $10, $10, $10, $10, $10
+.byte $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10, $10
+.byte $f0, $f0, $f0, $f0, $f0, $f0, $f0, $f0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
+.byte $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0, $d0
 
 .pc = $6b00 "Sprite Top Right Corner"
 sprite_x4:
