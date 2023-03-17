@@ -376,12 +376,13 @@ sp1_xpos:
         sta $d000        
         sta $d008
 
-        lda #$88
-        clc
-        adc #$18
+        lda sprite_x2,x
         sta $d002
-        adc #$18
+        sta $d00a
+
+        lda sprite_x3,x
         sta $d004
+        sta $d00c
         
  sp4_xpos:
         ldx #$00       
@@ -405,8 +406,13 @@ sp1_xpos:
         sta do10 + 1
 
 spriteblock1Ypos:
-        lda #$80  //start $32
+        //lda #$80  //start $32
         //sta $d001
+sp2_ypos:
+        ldx #$00
+        lda sprite_y2,x
+        clc
+        adc #$80
         sta $d003
         sta $d005
         //sta $d007
@@ -424,12 +430,12 @@ spriteblock1Ypos:
         //min x = $18
         //max x = $f7
 spriteblock2Xpos:        
-        lda #$88
-        clc
-        adc #$18
-        sta $d00a
-        adc #$18
-        sta $d00c
+        // lda #$88
+        // clc
+        // adc #$18
+        // //sta $d00a
+        // adc #$18
+        // sta $d00c
         // adc #$18
         // sta $d00e
 
@@ -461,6 +467,7 @@ incsp4:
         inc sp4_xpos + 1
         inc sp1_xpos + 1
         inc sp6_ypos + 1
+        inc sp2_ypos + 1
 
         lda sp4_xpos + 1
         cmp #$80
@@ -470,6 +477,7 @@ incsp4:
         sta sp1_xpos + 1
         sta sp4_xpos + 1
         sta sp6_ypos + 1
+        sta sp2_ypos + 1
 
 incsp5:
 
@@ -672,6 +680,43 @@ sprite_y6:
         .byte $1b, $1b, $1b, $1a, $1a, $1a, $19, $18, $17, $16, $15, $14, $13, $12, $10, $0e
         .byte $0d, $0b, $09, $08, $07, $06, $05, $04, $03, $02, $01, $01, $01, $00, $00, $00
 
+.pc = $6f00 "Sprite upper middle Y"
+
+sprite_y2:
+        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+        .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+
+        .byte $00, $00, $00, $ff, $ff, $ff, $fe, $fd, $fc, $fb, $fa, $f9, $f8, $f7, $f5, $f3
+        .byte $f2, $f0, $ee, $ed, $ec, $eb, $ea, $e9, $e8, $e7, $e6, $e6, $e6, $e5, $e5, $e5
+        .byte $e5, $e5, $e5, $e6, $e6, $e6, $e7, $e8, $e9, $ea, $eb, $ec, $ed, $ee, $f0, $f2
+        .byte $f3, $f5, $f7, $f8, $f9, $fa, $fb, $fc, $fd, $fe, $ff, $ff, $ff, $00, $00, $00
+
+
+.pc = $7000 "Sprite upper + lower left middle X"
+
+sprite_x2:
+        .byte $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0
+        .byte $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0
+        .byte $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0
+        .byte $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0, $a0
+
+        .byte $a0, $a0, $a0, $9f, $9f, $9f, $9e, $9d, $9c, $9b, $9a, $99, $98, $97, $95, $93
+        .byte $92, $90, $8e, $8d, $8c, $8b, $8a, $89, $88, $87, $86, $86, $86, $85, $85, $85
+        .byte $85, $85, $85, $86, $86, $86, $87, $88, $89, $8a, $8b, $8c, $8d, $8e, $90, $92
+        .byte $93, $95, $97, $98, $99, $9a, $9b, $9c, $9d, $9e, $9f, $9f, $9f, $a0, $a0, $a0
+
+sprite_x3:
+        .byte $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8
+        .byte $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8
+        .byte $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8
+        .byte $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8, $b8
+
+        .byte $b8, $b8, $b8, $b9, $b9, $b9, $ba, $bb, $bc, $bd, $be, $bf, $c0, $c1, $c3, $c5
+        .byte $c6, $c8, $ca, $cb, $cc, $cd, $ce, $cf, $d0, $d1, $d2, $d2, $d2, $d3, $d3, $d3
+        .byte $d3, $d3, $d3, $d2, $d2, $d2, $d1, $d0, $cf, $ce, $cd, $cc, $cb, $ca, $c8, $c6
+        .byte $c5, $c3, $c1, $c0, $bf, $be, $bd, $bc, $bb, $ba, $b9, $b9, $b9, $b8, $b8, $b8
 
 .pc = $8000 "d010 table 1"
 do10_x4:
