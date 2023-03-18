@@ -8,6 +8,7 @@
 .import source "textchanger.asm"
 .import source "50sprites.asm"
 .import source "confettibmp.asm"
+.import source "hblogo.asm"
 
 .pc = $0801 "Program Start"
 :BasicUpstart($c000)
@@ -160,6 +161,21 @@ skipsetcol:
         sta colorline5 + 1
         adc #$02
         sta colorline6 + 1
+
+        ldx #$00
+sethblogo:        
+        lda hblogo,x
+        ora $3640,x
+        sta $3640,x
+        
+        .for(var i=1; i<9; i++) {
+                lda hblogo + $100*i,x
+                ora $3640 + $100*i,x
+                sta $3640 + $100*i,x        
+        }
+
+        inx
+        bne sethblogo
         rts        
 
 irq:	pha
