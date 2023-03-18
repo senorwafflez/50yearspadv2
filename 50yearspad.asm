@@ -345,7 +345,7 @@ stabilizer_raster_000:
 delay: .byte 1,1,1,1,$10,$10,1,1
 
 spriteyadd:
-        .byte $80
+        .byte $48
 
 setsprites:
 spritecolindex:
@@ -412,7 +412,7 @@ sp2_ypos:
         ldx #$00
         lda sprite_y2,x
         clc
-        adc #$80
+        adc spriteyadd
         sta $d003
         sta $d005
         //sta $d007
