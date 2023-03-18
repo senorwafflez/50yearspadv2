@@ -10,6 +10,9 @@
 .import source "confettibmp.asm"
 .import source "hblogo.asm"
 
+.var playmusic = false
+.var coldiff = 2
+
 .pc = $0801 "Program Start"
 :BasicUpstart($c000)
 
@@ -213,9 +216,10 @@ irq:	pha
         // jsr setsprites
         jsr colorchangeconfetti
         jsr spritecolorchanger
-        jsr music.play
 
-
+        .if (playmusic) {
+                jsr music.play
+        }
 
         lda #$02
         sta $d020
@@ -247,7 +251,10 @@ irq2:	pha
         sta $d020
 
         jsr setsprites
-        //jsr textchanger
+        
+        lda #$08
+        sta $d020
+        jsr changehbcolors
 
         lda #$06
         sta $d020
@@ -602,6 +609,110 @@ notresetspritecolindex:
 
         rts
 
+
+changehbcolors:
+
+hbcolline1:
+        ldx hbcolorssine
+        ldy #$00
+sethbcolors1:
+        lda hbcolorsline1,x
+        sta $06d2,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors1
+
+
+hbcolline2:
+        ldx hbcolorssine + coldiff
+        ldy #$00
+sethbcolors2:
+        lda hbcolorsline1,x
+        sta $06d2+40*1,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors2
+
+
+hbcolline3:
+        ldx hbcolorssine + coldiff*2
+        ldy #$00
+sethbcolors3:
+        lda hbcolorsline1,x
+        sta $06d2+40*1,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors3    
+
+hbcolline4:
+        ldx hbcolorssine + coldiff*3
+        ldy #$00
+sethbcolors4:
+        lda hbcolorsline1,x
+        sta $06d2+40*2,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors4
+
+hbcolline5:
+        ldx hbcolorssine + coldiff*4
+        ldy #$00
+sethbcolors5:
+        lda hbcolorsline1,x
+        sta $06d2+40*3,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors5
+
+hbcolline6:
+        ldx hbcolorssine + coldiff*5
+        ldy #$00
+sethbcolors6:
+        lda hbcolorsline1,x
+        sta $06d2+40*4,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors6
+
+hbcolline7:
+        ldx hbcolorssine + coldiff*6
+        ldy #$00
+sethbcolors7:
+        lda hbcolorsline1,x
+        sta $06d2+40*5,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors7
+
+hbcolline8:
+        ldx hbcolorssine + coldiff*7
+        ldy #$00
+sethbcolors8:
+        lda hbcolorsline1,x
+        sta $06d2+40*6,y
+        inx
+        iny
+        cpy #$0c
+        bne sethbcolors8
+
+        inc hbcolline1 + 1
+        inc hbcolline2 + 1
+        inc hbcolline3 + 1
+        inc hbcolline4 + 1
+        inc hbcolline5 + 1
+        inc hbcolline6 + 1
+        inc hbcolline7 + 1
+        inc hbcolline8 + 1
+        rts
+
+
 .pc = $6900 "Confetticolors"
 confetti1:
 .byte $20, $20, $20, $20, $20, $20, $a0, $a0, $a0, $a0, $a0, $a0, $70, $70, $70, $70
@@ -763,3 +874,55 @@ bouncesine:
 .byte $68, $65, $61, $5e, $5a, $57, $55, $52, $50, $4e, $4c, $4b, $4a, $49, $48, $48
 .byte $48, $48, $48, $49, $4a, $4b, $4c, $4e, $50, $52, $55, $57, $5a, $5e, $61, $65
 .byte $68, $6c, $70, $75, $79, $7e, $83, $88, $8d, $92, $97, $9c, $a2, $a7, $ad, $b2
+
+.pc = $7b00 "Happy birthday colors"
+
+hbcolorsline1:
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+        .byte $60, $40, $e0, $d0, $f0, $10, $f0, $d0, $e0, $40, $60, $00
+        .byte $80, $20, $a0, $70, $f0, $10, $f0, $70, $a0, $20, $80, $00
+        .byte $b0, $50, $d0, $70, $f0, $10, $f0, $70, $d0, $50, $b0, $00
+
+
+
+.pc = $7c00 "HB colors sine"
+hbcolorssine:
+.byte $40, $41, $43, $44, $46, $47, $49, $4a, $4c, $4e, $4f, $51, $52, $54, $55, $57
+.byte $58, $59, $5b, $5c, $5e, $5f, $60, $62, $63, $64, $66, $67, $68, $69, $6a, $6c
+.byte $6d, $6e, $6f, $70, $71, $72, $73, $74, $75, $76, $76, $77, $78, $79, $79, $7a
+.byte $7b, $7b, $7c, $7c, $7d, $7d, $7e, $7e, $7e, $7f, $7f, $7f, $7f, $7f, $7f, $7f
+.byte $80, $7f, $7f, $7f, $7f, $7f, $7f, $7f, $7e, $7e, $7e, $7d, $7d, $7c, $7c, $7b
+.byte $7b, $7a, $79, $79, $78, $77, $76, $76, $75, $74, $73, $72, $71, $70, $6f, $6e
+.byte $6d, $6c, $6a, $69, $68, $67, $66, $64, $63, $62, $60, $5f, $5e, $5c, $5b, $59
+.byte $58, $57, $55, $54, $52, $51, $4f, $4e, $4c, $4a, $49, $47, $46, $44, $43, $41
+.byte $40, $3e, $3c, $3b, $39, $38, $36, $35, $33, $31, $30, $2e, $2d, $2b, $2a, $28
+.byte $27, $26, $24, $23, $21, $20, $1f, $1d, $1c, $1b, $19, $18, $17, $16, $15, $13
+.byte $12, $11, $10, $0f, $0e, $0d, $0c, $0b, $0a, $09, $09, $08, $07, $06, $06, $05
+.byte $04, $04, $03, $03, $02, $02, $01, $01, $01, $00, $00, $00, $00, $00, $00, $00
+.byte $00, $00, $00, $00, $00, $00, $00, $00, $01, $01, $01, $02, $02, $03, $03, $04
+.byte $04, $05, $06, $06, $07, $08, $09, $09, $0a, $0b, $0c, $0d, $0e, $0f, $10, $11
+.byte $12, $13, $15, $16, $17, $18, $19, $1b, $1c, $1d, $1f, $20, $21, $23, $24, $26
+.byte $27, $28, $2a, $2b, $2d, $2e, $30, $31, $33, $35, $36, $38, $39, $3b, $3c, $3e
