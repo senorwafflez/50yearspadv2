@@ -10,8 +10,12 @@
 .import source "confettibmp.asm"
 .import source "hblogo.asm"
 
-.var playmusic = false
+.var debug = true
+.var playmusic = true
 .var coldiff = 2
+
+.var hblogolinestart = 5
+.var hblogoput = $2000 + $140 * hblogolinestart - $8*8
 
 .pc = $0801 "Program Start"
 :BasicUpstart($c000)
@@ -183,18 +187,16 @@ skipsetcol:
         adc #$02
         sta colorline6 + 1
 
-        rts
-
         ldx #$00
 sethblogo:        
         lda hblogo,x
-        ora $3640,x
-        sta $3640,x
+        ora hblogoput,x
+        sta hblogoput,x
         
         .for(var i=1; i<9; i++) {
                 lda hblogo + $100*i,x
-                ora $3640 + $100*i,x
-                sta $3640 + $100*i,x        
+                ora hblogoput + $100*i,x
+                sta hblogoput + $100*i,x        
         }
 
         inx
@@ -233,17 +235,47 @@ irq:	pha
         sta $d01d
         sta $d017
 
-        // jsr setsprites
-        jsr colorchangeconfetti
-        jsr spritecolorchanger
+        // jsr setsprites      
 
         .if (playmusic) {
                 jsr music.play
         }
 
-        lda #$02
-        sta $d020
+        .if (debug) {
+                lda #$02
+                sta $d020
+        }
 
+        lda $d012
+        cmp #$5d
+        bne *-5
+
+.if (debug) {
+        lda #$00
+        sta $d020
+}
+        jsr colorchangeconfetti
+
+.if (debug) {
+        lda #$05
+        sta $d020
+}
+
+
+        lda $d012
+        cmp #$94
+        bne *-5
+
+.if (debug) {
+        lda #$00
+        sta $d020
+}
+      jsr changehbcolors
+
+.if (debug) {
+       lda #$08
+        sta $d020
+}
 
         lda #$fa
 	sta $d012
@@ -267,22 +299,21 @@ irq2:	pha
 	lda #$ff
 	sta $d019
 
+.if (debug) {
         lda #$0a
         sta $d020
-
-        jsr setsprites
+}
+        jsr setsprites        
+        jsr spritecolorchanger
         jsr textchanger
 
-        lda #$08
-        sta $d020
-//        jsr changehbcolors
-
+.if (debug) {
         lda #$06
         sta $d020
-
+}
         dec iloop + 1
 
-	lda #$50
+	lda #$2f
 	sta $d012
 	lda #<irq
 	sta $fffe
@@ -638,7 +669,7 @@ hbcolline1:
         ldy #$00
 sethbcolors1:
         lda hbcolorsline1,x
-        sta $06d2,y
+        sta $0400 + hblogolinestart * 40 + 40 * 0 + 2,y
         inx
         iny
         cpy #$0c
@@ -650,7 +681,7 @@ hbcolline2:
         ldy #$00
 sethbcolors2:
         lda hbcolorsline1,x
-        sta $06d2+40*1,y
+        sta $0400 + hblogolinestart * 40 + 40 * 1 + 2,y
         inx
         iny
         cpy #$0c
@@ -662,7 +693,7 @@ hbcolline3:
         ldy #$00
 sethbcolors3:
         lda hbcolorsline1,x
-        sta $06d2+40*1,y
+        sta $0400 + hblogolinestart * 40 + 40 * 2 + 2,y
         inx
         iny
         cpy #$0c
@@ -673,7 +704,7 @@ hbcolline4:
         ldy #$00
 sethbcolors4:
         lda hbcolorsline1,x
-        sta $06d2+40*2,y
+        sta $0400 + hblogolinestart * 40 + 40 * 3 + 2,y
         inx
         iny
         cpy #$0c
@@ -684,7 +715,7 @@ hbcolline5:
         ldy #$00
 sethbcolors5:
         lda hbcolorsline1,x
-        sta $06d2+40*3,y
+        sta $0400 + hblogolinestart * 40 + 40 * 4 + 2,y
         inx
         iny
         cpy #$0c
@@ -695,7 +726,7 @@ hbcolline6:
         ldy #$00
 sethbcolors6:
         lda hbcolorsline1,x
-        sta $06d2+40*4,y
+        sta $0400 + hblogolinestart * 40 + 40 * 5 + 2,y
         inx
         iny
         cpy #$0c
@@ -706,22 +737,22 @@ hbcolline7:
         ldy #$00
 sethbcolors7:
         lda hbcolorsline1,x
-        sta $06d2+40*5,y
+        sta $0400 + hblogolinestart * 40 + 40 * 6 + 2,y
         inx
         iny
         cpy #$0c
         bne sethbcolors7
 
-hbcolline8:
-        ldx hbcolorssine + coldiff*7
-        ldy #$00
-sethbcolors8:
-        lda hbcolorsline1,x
-        sta $06d2+40*6,y
-        inx
-        iny
-        cpy #$0c
-        bne sethbcolors8
+// hbcolline8:
+//         ldx hbcolorssine + coldiff*7
+//         ldy #$00
+// sethbcolors8:
+//         lda hbcolorsline1,x
+//         sta $06d2+40*6,y
+//         inx
+//         iny
+//         cpy #$0c
+//         bne sethbcolors8
 
         inc hbcolline1 + 1
         inc hbcolline2 + 1
@@ -730,7 +761,7 @@ sethbcolors8:
         inc hbcolline5 + 1
         inc hbcolline6 + 1
         inc hbcolline7 + 1
-        inc hbcolline8 + 1
+        // inc hbcolline8 + 1
         rts
 
 
