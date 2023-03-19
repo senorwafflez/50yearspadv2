@@ -14,8 +14,8 @@
 .import source "scrolltext.asm"
 
 
-.var debug = false
-.var playmusic = true
+.var debug = true
+.var playmusic = false
 .var coldiff = 2
 
 .var hblogolinestart = 5

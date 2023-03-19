@@ -79,6 +79,7 @@ keepchangingcolors:
     ldx #$00
 colorline1:    
     lda colorchangetable
+    //lda #$05
     sta $0400 + linenumberstart * 40,x
 colorline2:
     lda colorchangetable
