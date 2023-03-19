@@ -32,8 +32,8 @@ greetings:
     .text "music :         "
     .text "xiny6581        "
     .text "                "
-    .text "2x2 font :      "
-    .text "snabel          "
+    .text "1x2 font :      "
+    .text "hedning         "
     .text "                "
     .fill $20, $00
 

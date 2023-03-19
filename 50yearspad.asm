@@ -18,7 +18,7 @@
 .var playmusic = true
 .var coldiff = 2
 
-.var hblogolinestart = 5
+.var hblogolinestart = 6
 .var hblogoput = $2000 + $140 * hblogolinestart - $8*8
 
 .pc = $0801 "Program Start"
@@ -78,6 +78,11 @@ nmi:
 init:
         lda #$93
         jsr $ffd2
+
+        lda #$00
+        sta scrolltextfetch + 1
+        lda #$90
+        sta scrolltextfetch + 2
 
 		ldx #$00
 setimgcolors:		
