@@ -9,8 +9,12 @@
 .import source "50sprites.asm"
 .import source "confettibmp.asm"
 .import source "hblogo.asm"
+.import source "rolscroller.asm"
+.import source "hires-2x2.asm"
+.import source "scrolltext.asm"
 
-.var debug = true
+
+.var debug = false
 .var playmusic = true
 .var coldiff = 2
 
@@ -201,6 +205,16 @@ sethblogo:
 
         inx
         bne sethblogo
+
+
+        ldx #$00
+        lda #$f0
+setrolscrolcolor:
+        sta $0400 + rollinenumberstart * 40,x
+        sta $0400 + rollinenumberstart * 40 + 40,x
+        inx
+        cpx #rolwidth
+        bne setrolscrolcolor
         rts        
 
 irq:	pha
@@ -255,6 +269,7 @@ irq:	pha
         sta $d020
 }
         jsr colorchangeconfetti
+        jsr rolscroller
 
 .if (debug) {
         lda #$05
@@ -263,7 +278,7 @@ irq:	pha
 
 
         lda $d012
-        cmp #$94
+        cmp #$b0
         bne *-5
 
 .if (debug) {

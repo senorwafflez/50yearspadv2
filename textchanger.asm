@@ -3,9 +3,9 @@
 .pc = $4200 "Textchanger"
 
 //.var charsetload = $4000
-.var lineadd = $280
+.var lineadd = $140
 
-.var linenumberstart = 13
+.var linenumberstart = 14
 .var line1start = $2000 + $140 * linenumberstart
 
 textcountdown:
@@ -82,19 +82,19 @@ colorline1:
     sta $0400 + linenumberstart * 40,x
 colorline2:
     lda colorchangetable
-    sta $0400 + linenumberstart * 40 + 80,x
+    sta $0400 + linenumberstart * 40 + 40,x
 colorline3:
     lda colorchangetable
-    sta $0400 + linenumberstart * 40 + 160,x
+    sta $0400 + linenumberstart * 40 + 80,x
 colorline4:
     lda colorchangetable
-    sta $0400 + linenumberstart * 40 + 240,x
+    sta $0400 + linenumberstart * 40 + 120,x
 colorline5:
     lda colorchangetable
-    sta $0400 + linenumberstart * 40 + 320,x
+    sta $0400 + linenumberstart * 40 + 160,x
 colorline6:
     lda colorchangetable
-    sta $0400 + linenumberstart * 40 + 400,x
+    sta $0400 + linenumberstart * 40 + 200,x
 
     inx
     cpx #$10

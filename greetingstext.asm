@@ -1,21 +1,22 @@
 .pc = $0900 "Greetingstext"
 
 greetings:
-    .text "wafflez4u waffle"
-    .text "z4u wafflez4u wa"
-    .text "fflez4u wafflez4"
-    .text "u wafflez4u waff"
-    .text "lez4u wafflez4u "
-    .text "wafflez4u waffle"
-    .fill $20, $00
+
+    .text "There once was a"
+    .text "coder named Pad "
+    .text "                "
+    .text "Whose skills    "
+    .text "were something  "
+    .text "to be had       "
 
 //block 2
-    .text "pancakez4u panca"
-    .text "akez4u pancakez4"
-    .text "u pancakez4u pan"
-    .text "cakez4u pancakez"
-    .text "4u pancakez4u pa"
-    .text "ncakez4u pancake"
+    .text "On his birthday "
+    .text "we'll cheer     "
+    .text "And raise a cold"
+    .text "beer,           "
+    .text "For a programmer"
+    .text "who's really    "
+    .text "quite rad!      "
     .fill $20, $00
 
 //block 3
