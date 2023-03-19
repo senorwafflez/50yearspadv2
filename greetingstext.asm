@@ -33,7 +33,7 @@ greetings:
     .text "xiny6581        "
     .text "                "
     .text "2x2 font :      "
-    .text "cupid           "
+    .text "snabel          "
     .text "                "
     .fill $20, $00
 
@@ -49,12 +49,12 @@ greetings:
 
 
 //block 3
-    .text "1234567890123456"
-    .text "abcdefghijklmnop"
-    .text "qrstuvwxyzabcdef"
-    .text "ghijklmnopqrstuv"
-    .text "wxyzabcdefghijkl"
-    .text "mnopqrstuvwxyz12"
+    .text "                "
+    .text "                "
+    .text "                "
+    .text "                "
+    .text "                "
+    .text "                "
     .fill $20, $00
 
 //etc
