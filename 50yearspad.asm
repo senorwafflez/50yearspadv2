@@ -53,9 +53,13 @@ iloop:
 	lda #$00
 	sta iloop+1
 
-        inc $d020
-        jsr textchanger
-        dec $d020
+//         inc $d020
+// spchangerstart:        
+//         lda $d012
+//         cmp #$32
+//         bne spchangerstart
+//         jsr textchanger
+//         dec $d020
 
 wait:
 	jmp iloop
@@ -151,6 +155,20 @@ skipsetcol:
 
         lda #$02
         sta canchangetext
+        lda #$01
+        sta canchangeline2
+        sta canchangeline3
+        sta canchangeline4
+        sta canchangeline5
+        sta canchangeline6
+
+        lda #$00
+        sta bounceload + 1
+        sta sp4_xpos + 1
+        sta sp1_xpos + 1
+        sta sp6_ypos + 1
+        sta sp2_ypos + 1
+
         lda #$00
         sta colorline1 + 1
         clc
@@ -164,6 +182,8 @@ skipsetcol:
         sta colorline5 + 1
         adc #$02
         sta colorline6 + 1
+
+        rts
 
         ldx #$00
 sethblogo:        
@@ -251,10 +271,11 @@ irq2:	pha
         sta $d020
 
         jsr setsprites
-        
+        jsr textchanger
+
         lda #$08
         sta $d020
-        jsr changehbcolors
+//        jsr changehbcolors
 
         lda #$06
         sta $d020

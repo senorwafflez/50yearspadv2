@@ -4,19 +4,67 @@
 
 //.var charsetload = $4000
 .var lineadd = $280
-.var line1start = $2000 + $140 * 6
+
+.var linenumberstart = 13
+.var line1start = $2000 + $140 * linenumberstart
 
 textcountdown:
 .byte $80
 canchangetext:
 .byte $02
+canchangeline2:
+.byte $01
+canchangeline3:
+.byte $01
+canchangeline4:
+.byte $01
+canchangeline5:
+.byte $01
+canchangeline6:
+.byte $01
+
 
 textchanger:
 
     lda canchangetext
-    bne docountdown
+    bne checkline2
 
     jsr executetextchange
+    jmp skipcolorsetthisframe
+
+checkline2:
+    lda canchangeline2
+    bne checkline3
+
+    jsr executetextchange2
+    jmp skipcolorsetthisframe
+
+checkline3:
+    lda canchangeline3
+    bne checkline4
+
+    jsr executetextchange3
+    jmp skipcolorsetthisframe
+
+checkline4:
+    lda canchangeline4
+    bne checkline5
+
+    jsr executetextchange4
+    jmp skipcolorsetthisframe
+
+checkline5:
+    lda canchangeline5
+    bne checkline6
+
+    jsr executetextchange5
+    jmp skipcolorsetthisframe
+
+checkline6:
+    lda canchangeline6
+    bne docountdown
+
+    jsr executetextchange6
     jmp skipcolorsetthisframe
 
 docountdown:
@@ -31,22 +79,22 @@ keepchangingcolors:
     ldx #$00
 colorline1:    
     lda colorchangetable
-    sta $04f0,x
+    sta $0400 + linenumberstart * 40,x
 colorline2:
     lda colorchangetable
-    sta $0540,x
+    sta $0400 + linenumberstart * 40 + 80,x
 colorline3:
     lda colorchangetable
-    sta $0590,x
+    sta $0400 + linenumberstart * 40 + 160,x
 colorline4:
     lda colorchangetable
-    sta $05e0,x
+    sta $0400 + linenumberstart * 40 + 240,x
 colorline5:
     lda colorchangetable
-    sta $0630,x
+    sta $0400 + linenumberstart * 40 + 320,x
 colorline6:
     lda colorchangetable
-    sta $0680,x
+    sta $0400 + linenumberstart * 40 + 400,x
 
     inx
     cpx #$10
@@ -123,6 +171,8 @@ greetingshiByte:
 executetextchange:
     lda #$02
     sta canchangetext
+    lda #$00
+    sta canchangeline2   
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
@@ -146,6 +196,14 @@ executetextchange:
             iny
         }
     }
+   
+    rts
+
+executetextchange2:
+    lda #$01
+    sta canchangeline2
+    lda #$00
+    sta canchangeline3
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
@@ -169,6 +227,13 @@ executetextchange:
             iny
         }
     }
+    rts
+
+executetextchange3:
+    lda #$01
+    sta canchangeline3
+    lda #$00
+    sta canchangeline4
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
@@ -192,6 +257,13 @@ executetextchange:
             iny
         }
     }
+    rts
+
+executetextchange4:
+    lda #$01
+    sta canchangeline4
+    lda #$00
+    sta canchangeline5
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
@@ -215,6 +287,13 @@ executetextchange:
             iny
         }
     }
+    rts
+
+executetextchange5:
+    lda #$01
+    sta canchangeline5
+    lda #$00
+    sta canchangeline6
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
@@ -238,6 +317,11 @@ executetextchange:
             iny
         }
     }
+    rts
+
+executetextchange6:
+    lda #$01
+    sta canchangeline6
 
     ldx #$00   
     .for (var j = 0; j < 16; j++)
