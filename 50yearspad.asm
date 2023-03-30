@@ -76,6 +76,16 @@ nmi:
 	rti
 
 init:
+        lda #$01
+        sta $d020
+        sta $d021
+        
+
+        // lda #$3b
+        // sta $d011
+        lda #$18
+        sta $d018
+
         lda #$93
         jsr $ffd2
 
